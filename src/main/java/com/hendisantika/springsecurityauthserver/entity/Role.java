@@ -1,5 +1,10 @@
 package com.hendisantika.springsecurityauthserver.entity;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 /**
@@ -14,6 +19,10 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "role")
+@Data
+@NoArgsConstructor
+@Getter
+@Setter
 public class Role {
 
     @Id
@@ -24,22 +33,4 @@ public class Role {
     @Column(name = "role")
     private String role;
 
-    public Role() {
-    }
-
-    public int getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 }
