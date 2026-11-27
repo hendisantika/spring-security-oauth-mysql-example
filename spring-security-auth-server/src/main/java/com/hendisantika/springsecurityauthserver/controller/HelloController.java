@@ -1,10 +1,12 @@
 package com.hendisantika.springsecurityauthserver.controller;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,8 +23,12 @@ import java.security.Principal;
 public class HelloController {
 
     @GetMapping("/principal")
-    public Principal user(Principal principal) {
-        return principal;
+    public Map<String, Object> user(Authentication authentication) {
+        return Map.of(
+                "name", authentication.getName(),
+                "authorities", authentication.getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .toList());
     }
 
     @GetMapping
@@ -31,4 +37,3 @@ public class HelloController {
     }
 
 }
-

@@ -1,15 +1,13 @@
 package com.hendisantika.springsecurityauthserver.service;
 
 import com.hendisantika.springsecurityauthserver.entity.CustomUserDetails;
-import com.hendisantika.springsecurityauthserver.entity.Users;
 import com.hendisantika.springsecurityauthserver.repository.UsersRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,20 +20,16 @@ import java.util.Optional;
  * To change this template use File | Settings | File Templates.
  */
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UsersRepository usersRepository;
+    private final UsersRepository usersRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        Optional<Users> usersOptional = usersRepository.findByName(username);
-
-        usersOptional
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found!"));
-        return usersOptional
+        return usersRepository.findByName(username)
                 .map(CustomUserDetails::new)
-                .get();
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found!"));
     }
 }

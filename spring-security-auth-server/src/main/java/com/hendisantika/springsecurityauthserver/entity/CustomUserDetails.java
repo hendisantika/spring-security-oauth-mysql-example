@@ -4,8 +4,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,48 +18,43 @@ import java.util.stream.Collectors;
  * Time: 05.07
  * To change this template use File | Settings | File Templates.
  */
-public class CustomUserDetails extends Users implements UserDetails {
+public class CustomUserDetails implements UserDetails {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    private final String username;
+    private final String password;
+    private final boolean enabled;
+    private final List<SimpleGrantedAuthority> authorities;
 
     public CustomUserDetails(final Users users) {
-        super(users);
+        this.username = users.getName();
+        this.password = users.getPassword();
+        this.enabled = users.getActive() == 1;
+        this.authorities = users.getRoles()
+                .stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole()))
+                .toList();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        return getRoles()
-                .stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole()))
-                .collect(Collectors.toList());
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return super.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return super.getName();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
+        return username;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }
