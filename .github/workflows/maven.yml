@@ -83,4 +83,6 @@ jobs:
         uses: advanced-security/maven-dependency-submission-action@v6
         with:
           directory: ${{ matrix.module }}
+          # The action resolves mvnw relative to `directory` twice; use the runner's Maven instead
+          ignore-maven-wrapper: true
           correlator: ${{ github.job }}-${{ matrix.module }}
