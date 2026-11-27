@@ -1,24 +1,35 @@
 server:
   port: 8082
-  context-path: /ui
-  session:
-    cookie:
-      name: UISESSION
+  servlet:
+    context-path: /ui
+    session:
+      cookie:
+        name: UISESSION
 
-
-security:
-  basic:
-    enabled: false
-  oauth2:
-    client:
-      clientId: ClientId
-      clientSecret: secret
-      accessTokenUri: http://localhost:8081/auth/oauth/token
-      userAuthorizationUri: http://localhost:8081/auth/oauth/authorize
-    resource:
-      userInfoUri: http://localhost:8081/auth/rest/hello/principal
-
+app:
+  auth-server-uri: http://localhost:8081/auth
 
 spring:
+  application:
+    name: spring-security-client
   thymeleaf:
-cache: false
+    cache: false
+  security:
+    oauth2:
+      client:
+        registration:
+          auth-server:
+            provider: auth-server
+            client-id: ClientId
+            client-secret: secret
+            client-name: Spring Authorization Server
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: openid,profile,user_info
+        provider:
+          auth-server:
+            authorization-uri: ${app.auth-server-uri}/oauth2/authorize
+            token-uri: ${app.auth-server-uri}/oauth2/token
+            jwk-set-uri: ${app.auth-server-uri}/oauth2/jwks
+            user-info-uri: ${app.auth-server-uri}/userinfo
+            user-name-attribute: sub

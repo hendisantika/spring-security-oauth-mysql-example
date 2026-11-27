@@ -1,9 +1,10 @@
 package com.hendisantika.springsecurityclient.config;
 
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,20 +16,17 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * Time: 06.24
  * To change this template use File | Settings | File Templates.
  */
-@EnableOAuth2Sso
 @Configuration
-public class OauthConfig extends WebSecurityConfigurerAdapter {
+public class OauthConfig {
 
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-
-        http.antMatcher("/**")
-                .authorizeRequests()
-                .antMatchers("/", "/login**")
-                .permitAll()
-                .anyRequest()
-                .authenticated();
-
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/", "/index", "/error").permitAll()
+                        .anyRequest().authenticated())
+                .oauth2Login(Customizer.withDefaults())
+                .logout(logout -> logout.logoutSuccessUrl("/"));
+        return http.build();
     }
 }

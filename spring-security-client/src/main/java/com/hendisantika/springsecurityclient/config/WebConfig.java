@@ -2,9 +2,9 @@ package com.hendisantika.springsecurityclient.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.web.context.request.RequestContextListener;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,40 +16,17 @@ import org.springframework.web.servlet.config.annotation.*;
  * Time: 06.28
  * To change this template use File | Settings | File Templates.
  */
-@EnableWebMvc
 @Configuration
-public class WebConfig extends WebMvcConfigurerAdapter {
-
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
-
-    @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
-    }
+public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        super.addViewControllers(registry);
-
-        registry.addViewController("/")
-                .setViewName("forward:/index");
-
-        registry.addViewController("/index");
-        registry.addViewController("/secure");
-
-    }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**")
-                .addResourceLocations("/resources/");
+        registry.addViewController("/").setViewName("index");
+        registry.addViewController("/index").setViewName("index");
     }
 
     @Bean
-    public RequestContextListener requestContextListener() {
-        return new RequestContextListener();
+    public RestClient restClient() {
+        return RestClient.create();
     }
 }

@@ -1,19 +1,28 @@
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Spring Security OAuth Example</title>
-
 </head>
-
-
 <body>
 
 <h1>Spring Security OAuth Example - Secured</h1>
 
-Welcome to TechPrimers!
+<p>Welcome, <strong sec:authentication="name"></strong>!</p>
 
-<span th:text="${#authentication.name}"></span>
+<h2>Granted scopes</h2>
+<ul>
+    <li th:each="scope : ${scopes}" th:text="${scope}"></li>
+</ul>
+
+<h2>Response from auth server <code>/rest/hello/principal</code></h2>
+<pre th:if="${apiResponse}" th:text="${apiResponse}"></pre>
+<p th:if="${apiError}" th:text="'Failed to call API: ' + ${apiError}"></p>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
+
 </body>
-
 </html>

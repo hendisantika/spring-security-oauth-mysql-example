@@ -1,18 +1,22 @@
-<html>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Spring Security OAuth Example</title>
-
 </head>
-
-
 <body>
 
 <h1>Spring Security OAuth Example</h1>
 
-<a href="secure">Login to OAuth here</a>
+<p sec:authorize="isAnonymous()">
+    <a th:href="@{/secure}">Login to OAuth here</a>
+</p>
+
+<div sec:authorize="isAuthenticated()">
+    <p>Signed in as <strong sec:authentication="name"></strong></p>
+    <a th:href="@{/secure}">Go to secured page</a>
+</div>
 
 </body>
-
 </html>
