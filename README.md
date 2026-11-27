@@ -18,7 +18,7 @@ Spring Security OAuth2 example with users stored in MySQL. It consists of two Sp
 - Spring Boot 4.2 / Spring Security 7 (Spring Authorization Server, OAuth2 Client, OAuth2 Resource Server)
 - Spring Data JPA + MySQL 8
 - Thymeleaf + `thymeleaf-extras-springsecurity6`
-- Maven Wrapper 3.9
+- Maven Wrapper (Maven 3.10)
 - JUnit 5, MockMvc, H2 (tests only)
 
 ## How it works
